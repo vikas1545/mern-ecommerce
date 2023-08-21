@@ -1,998 +1,311 @@
-import React, { useState, Fragment } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-//import { increment, incrementAsync, selectCount } from '../productSlice';
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
-import { XMarkIcon } from '@heroicons/react/24/outline';
-import { ChevronLeftIcon, ChevronRightIcon,StarIcon } from '@heroicons/react/20/solid'
-import { Link } from 'react-router-dom';
-import {
-  ChevronDownIcon,
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-} from '@heroicons/react/20/solid';
+import { useState } from 'react'
+import { StarIcon } from '@heroicons/react/20/solid'
+import { RadioGroup } from '@headlessui/react'
 
-const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
-  { name: 'Best Rating', href: '#', current: false },
-  { name: 'Newest', href: '#', current: false },
-  { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-];
-
-const filters = [
-  {
-    id: 'color',
-    name: 'Color',
-    options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
-    ],
-  },
-  {
-    id: 'category',
-    name: 'Category',
-    options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
-  },
-  {
-    id: 'size',
-    name: 'Size',
-    options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
-];
+const product = {
+  name: 'Basic Tee 6-Pack',
+  price: '$192',
+  href: '#',
+  breadcrumbs: [
+    { id: 1, name: 'Men', href: '#' },
+    { id: 2, name: 'Clothing', href: '#' },
+  ],
+  images: [
+    {
+      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-secondary-product-shot.jpg',
+      alt: 'Two each of gray, white, and black shirts laying flat.',
+    },
+    {
+      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-01.jpg',
+      alt: 'Model wearing plain black basic tee.',
+    },
+    {
+      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-tertiary-product-shot-02.jpg',
+      alt: 'Model wearing plain gray basic tee.',
+    },
+    {
+      src: 'https://tailwindui.com/img/ecommerce-images/product-page-02-featured-product-shot.jpg',
+      alt: 'Model wearing plain white basic tee.',
+    },
+  ],
+  colors: [
+    { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
+    { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
+    { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
+  ],
+  sizes: [
+    { name: 'XXS', inStock: false },
+    { name: 'XS', inStock: true },
+    { name: 'S', inStock: true },
+    { name: 'M', inStock: true },
+    { name: 'L', inStock: true },
+    { name: 'XL', inStock: true },
+    { name: '2XL', inStock: true },
+    { name: '3XL', inStock: true },
+  ],
+  description:
+    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
+  highlights: [
+    'Hand cut and sewn locally',
+    'Dyed with our proprietary colors',
+    'Pre-washed & pre-shrunk',
+    'Ultra-soft 100% cotton',
+  ],
+  details:
+    'The 6-Pack includes two black, two white, and two heather gray Basic Tees. Sign up for our subscription service and be the first to get new, exciting colors, like our upcoming "Charcoal Gray" limited release.',
+}
+const reviews = { href: '#', average: 4, totalCount: 117 }
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ');
+  return classes.filter(Boolean).join(' ')
 }
 
-const products = 
-[
-  {
-    "id": 1,
-    "title": "iPhone 9",
-    "description": "An apple mobile which is nothing like apple",
-    "price": 549,
-    "discountPercentage": 12.96,
-    "rating": 4.69,
-    "stock": 94,
-    "brand": "Apple",
-    "category": "smartphones",
-    "thumbnail": "https://i.dummyjson.com/data/products/1/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/1/1.jpg",
-      "https://i.dummyjson.com/data/products/1/2.jpg",
-      "https://i.dummyjson.com/data/products/1/3.jpg",
-      "https://i.dummyjson.com/data/products/1/4.jpg",
-      "https://i.dummyjson.com/data/products/1/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 2,
-    "title": "iPhone X",
-    "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
-    "price": 899,
-    "discountPercentage": 17.94,
-    "rating": 4.44,
-    "stock": 34,
-    "brand": "Apple",
-    "category": "smartphones",
-    "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/2/1.jpg",
-      "https://i.dummyjson.com/data/products/2/2.jpg",
-      "https://i.dummyjson.com/data/products/2/3.jpg",
-      "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 3,
-    "title": "Samsung Universe 9",
-    "description": "Samsung's new variant which goes beyond Galaxy to the Universe",
-    "price": 1249,
-    "discountPercentage": 15.46,
-    "rating": 4.09,
-    "stock": 36,
-    "brand": "Samsung",
-    "category": "smartphones",
-    "thumbnail": "https://i.dummyjson.com/data/products/3/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/3/1.jpg"
-    ]
-  },
-  {
-    "id": 4,
-    "title": "OPPOF19",
-    "description": "OPPO F19 is officially announced on April 2021.",
-    "price": 280,
-    "discountPercentage": 17.91,
-    "rating": 4.3,
-    "stock": 123,
-    "brand": "OPPO",
-    "category": "smartphones",
-    "thumbnail": "https://i.dummyjson.com/data/products/4/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/4/1.jpg",
-      "https://i.dummyjson.com/data/products/4/2.jpg",
-      "https://i.dummyjson.com/data/products/4/3.jpg",
-      "https://i.dummyjson.com/data/products/4/4.jpg",
-      "https://i.dummyjson.com/data/products/4/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 5,
-    "title": "Huawei P30",
-    "description": "Huawei’s re-badged P30 Pro New Edition was officially unveiled yesterday in Germany and now the device has made its way to the UK.",
-    "price": 499,
-    "discountPercentage": 10.58,
-    "rating": 4.09,
-    "stock": 32,
-    "brand": "Huawei",
-    "category": "smartphones",
-    "thumbnail": "https://i.dummyjson.com/data/products/5/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/5/1.jpg",
-      "https://i.dummyjson.com/data/products/5/2.jpg",
-      "https://i.dummyjson.com/data/products/5/3.jpg"
-    ]
-  },
-  {
-    "id": 6,
-    "title": "MacBook Pro",
-    "description": "MacBook Pro 2021 with mini-LED display may launch between September, November",
-    "price": 1749,
-    "discountPercentage": 11.02,
-    "rating": 4.57,
-    "stock": 83,
-    "brand": "Apple",
-    "category": "laptops",
-    "thumbnail": "https://i.dummyjson.com/data/products/6/thumbnail.png",
-    "images": [
-      "https://i.dummyjson.com/data/products/6/1.png",
-      "https://i.dummyjson.com/data/products/6/2.jpg",
-      "https://i.dummyjson.com/data/products/6/3.png",
-      "https://i.dummyjson.com/data/products/6/4.jpg"
-    ]
-  },
-  {
-    "id": 7,
-    "title": "Samsung Galaxy Book",
-    "description": "Samsung Galaxy Book S (2020) Laptop With Intel Lakefield Chip, 8GB of RAM Launched",
-    "price": 1499,
-    "discountPercentage": 4.15,
-    "rating": 4.25,
-    "stock": 50,
-    "brand": "Samsung",
-    "category": "laptops",
-    "thumbnail": "https://i.dummyjson.com/data/products/7/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/7/1.jpg",
-      "https://i.dummyjson.com/data/products/7/2.jpg",
-      "https://i.dummyjson.com/data/products/7/3.jpg",
-      "https://i.dummyjson.com/data/products/7/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 8,
-    "title": "Microsoft Surface Laptop 4",
-    "description": "Style and speed. Stand out on HD video calls backed by Studio Mics. Capture ideas on the vibrant touchscreen.",
-    "price": 1499,
-    "discountPercentage": 10.23,
-    "rating": 4.43,
-    "stock": 68,
-    "brand": "Microsoft Surface",
-    "category": "laptops",
-    "thumbnail": "https://i.dummyjson.com/data/products/8/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/8/1.jpg",
-      "https://i.dummyjson.com/data/products/8/2.jpg",
-      "https://i.dummyjson.com/data/products/8/3.jpg",
-      "https://i.dummyjson.com/data/products/8/4.jpg",
-      "https://i.dummyjson.com/data/products/8/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 9,
-    "title": "Infinix INBOOK",
-    "description": "Infinix Inbook X1 Ci3 10th 8GB 256GB 14 Win10 Grey – 1 Year Warranty",
-    "price": 1099,
-    "discountPercentage": 11.83,
-    "rating": 4.54,
-    "stock": 96,
-    "brand": "Infinix",
-    "category": "laptops",
-    "thumbnail": "https://i.dummyjson.com/data/products/9/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/9/1.jpg",
-      "https://i.dummyjson.com/data/products/9/2.png",
-      "https://i.dummyjson.com/data/products/9/3.png",
-      "https://i.dummyjson.com/data/products/9/4.jpg",
-      "https://i.dummyjson.com/data/products/9/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 10,
-    "title": "HP Pavilion 15-DK1056WM",
-    "description": "HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10",
-    "price": 1099,
-    "discountPercentage": 6.18,
-    "rating": 4.43,
-    "stock": 89,
-    "brand": "HP Pavilion",
-    "category": "laptops",
-    "thumbnail": "https://i.dummyjson.com/data/products/10/thumbnail.jpeg",
-    "images": [
-      "https://i.dummyjson.com/data/products/10/1.jpg",
-      "https://i.dummyjson.com/data/products/10/2.jpg",
-      "https://i.dummyjson.com/data/products/10/3.jpg",
-      "https://i.dummyjson.com/data/products/10/thumbnail.jpeg"
-    ]
-  },
-  {
-    "id": 11,
-    "title": "perfume Oil",
-    "description": "Mega Discount, Impression of Acqua Di Gio by GiorgioArmani concentrated attar perfume Oil",
-    "price": 13,
-    "discountPercentage": 8.4,
-    "rating": 4.26,
-    "stock": 65,
-    "brand": "Impression of Acqua Di Gio",
-    "category": "fragrances",
-    "thumbnail": "https://i.dummyjson.com/data/products/11/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/11/1.jpg",
-      "https://i.dummyjson.com/data/products/11/2.jpg",
-      "https://i.dummyjson.com/data/products/11/3.jpg",
-      "https://i.dummyjson.com/data/products/11/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 12,
-    "title": "Brown Perfume",
-    "description": "Royal_Mirage Sport Brown Perfume for Men & Women - 120ml",
-    "price": 40,
-    "discountPercentage": 15.66,
-    "rating": 4,
-    "stock": 52,
-    "brand": "Royal_Mirage",
-    "category": "fragrances",
-    "thumbnail": "https://i.dummyjson.com/data/products/12/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/12/1.jpg",
-      "https://i.dummyjson.com/data/products/12/2.jpg",
-      "https://i.dummyjson.com/data/products/12/3.png",
-      "https://i.dummyjson.com/data/products/12/4.jpg",
-      "https://i.dummyjson.com/data/products/12/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 13,
-    "title": "Fog Scent Xpressio Perfume",
-    "description": "Product details of Best Fog Scent Xpressio Perfume 100ml For Men cool long lasting perfumes for Men",
-    "price": 13,
-    "discountPercentage": 8.14,
-    "rating": 4.59,
-    "stock": 61,
-    "brand": "Fog Scent Xpressio",
-    "category": "fragrances",
-    "thumbnail": "https://i.dummyjson.com/data/products/13/thumbnail.webp",
-    "images": [
-      "https://i.dummyjson.com/data/products/13/1.jpg",
-      "https://i.dummyjson.com/data/products/13/2.png",
-      "https://i.dummyjson.com/data/products/13/3.jpg",
-      "https://i.dummyjson.com/data/products/13/4.jpg",
-      "https://i.dummyjson.com/data/products/13/thumbnail.webp"
-    ]
-  },
-  {
-    "id": 14,
-    "title": "Non-Alcoholic Concentrated Perfume Oil",
-    "description": "Original Al Munakh® by Mahal Al Musk | Our Impression of Climate | 6ml Non-Alcoholic Concentrated Perfume Oil",
-    "price": 120,
-    "discountPercentage": 15.6,
-    "rating": 4.21,
-    "stock": 114,
-    "brand": "Al Munakh",
-    "category": "fragrances",
-    "thumbnail": "https://i.dummyjson.com/data/products/14/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/14/1.jpg",
-      "https://i.dummyjson.com/data/products/14/2.jpg",
-      "https://i.dummyjson.com/data/products/14/3.jpg",
-      "https://i.dummyjson.com/data/products/14/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 15,
-    "title": "Eau De Perfume Spray",
-    "description": "Genuine  Al-Rehab spray perfume from UAE/Saudi Arabia/Yemen High Quality",
-    "price": 30,
-    "discountPercentage": 10.99,
-    "rating": 4.7,
-    "stock": 105,
-    "brand": "Lord - Al-Rehab",
-    "category": "fragrances",
-    "thumbnail": "https://i.dummyjson.com/data/products/15/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/15/1.jpg",
-      "https://i.dummyjson.com/data/products/15/2.jpg",
-      "https://i.dummyjson.com/data/products/15/3.jpg",
-      "https://i.dummyjson.com/data/products/15/4.jpg",
-      "https://i.dummyjson.com/data/products/15/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 16,
-    "title": "Hyaluronic Acid Serum",
-    "description": "L'OrÃ©al Paris introduces Hyaluron Expert Replumping Serum formulated with 1.5% Hyaluronic Acid",
-    "price": 19,
-    "discountPercentage": 13.31,
-    "rating": 4.83,
-    "stock": 110,
-    "brand": "L'Oreal Paris",
-    "category": "skincare",
-    "thumbnail": "https://i.dummyjson.com/data/products/16/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/16/1.png",
-      "https://i.dummyjson.com/data/products/16/2.webp",
-      "https://i.dummyjson.com/data/products/16/3.jpg",
-      "https://i.dummyjson.com/data/products/16/4.jpg",
-      "https://i.dummyjson.com/data/products/16/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 17,
-    "title": "Tree Oil 30ml",
-    "description": "Tea tree oil contains a number of compounds, including terpinen-4-ol, that have been shown to kill certain bacteria,",
-    "price": 12,
-    "discountPercentage": 4.09,
-    "rating": 4.52,
-    "stock": 78,
-    "brand": "Hemani Tea",
-    "category": "skincare",
-    "thumbnail": "https://i.dummyjson.com/data/products/17/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/17/1.jpg",
-      "https://i.dummyjson.com/data/products/17/2.jpg",
-      "https://i.dummyjson.com/data/products/17/3.jpg",
-      "https://i.dummyjson.com/data/products/17/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 18,
-    "title": "Oil Free Moisturizer 100ml",
-    "description": "Dermive Oil Free Moisturizer with SPF 20 is specifically formulated with ceramides, hyaluronic acid & sunscreen.",
-    "price": 40,
-    "discountPercentage": 13.1,
-    "rating": 4.56,
-    "stock": 88,
-    "brand": "Dermive",
-    "category": "skincare",
-    "thumbnail": "https://i.dummyjson.com/data/products/18/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/18/1.jpg",
-      "https://i.dummyjson.com/data/products/18/2.jpg",
-      "https://i.dummyjson.com/data/products/18/3.jpg",
-      "https://i.dummyjson.com/data/products/18/4.jpg",
-      "https://i.dummyjson.com/data/products/18/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 19,
-    "title": "Skin Beauty Serum.",
-    "description": "Product name: rorec collagen hyaluronic acid white face serum riceNet weight: 15 m",
-    "price": 46,
-    "discountPercentage": 10.68,
-    "rating": 4.42,
-    "stock": 54,
-    "brand": "ROREC White Rice",
-    "category": "skincare",
-    "thumbnail": "https://i.dummyjson.com/data/products/19/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/19/1.jpg",
-      "https://i.dummyjson.com/data/products/19/2.jpg",
-      "https://i.dummyjson.com/data/products/19/3.png",
-      "https://i.dummyjson.com/data/products/19/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 20,
-    "title": "Freckle Treatment Cream- 15gm",
-    "description": "Fair & Clear is Pakistan's only pure Freckle cream which helpsfade Freckles, Darkspots and pigments. Mercury level is 0%, so there are no side effects.",
-    "price": 70,
-    "discountPercentage": 16.99,
-    "rating": 4.06,
-    "stock": 140,
-    "brand": "Fair & Clear",
-    "category": "skincare",
-    "thumbnail": "https://i.dummyjson.com/data/products/20/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/20/1.jpg",
-      "https://i.dummyjson.com/data/products/20/2.jpg",
-      "https://i.dummyjson.com/data/products/20/3.jpg",
-      "https://i.dummyjson.com/data/products/20/4.jpg",
-      "https://i.dummyjson.com/data/products/20/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 21,
-    "title": "- Daal Masoor 500 grams",
-    "description": "Fine quality Branded Product Keep in a cool and dry place",
-    "price": 20,
-    "discountPercentage": 4.81,
-    "rating": 4.44,
-    "stock": 133,
-    "brand": "Saaf & Khaas",
-    "category": "groceries",
-    "thumbnail": "https://i.dummyjson.com/data/products/21/thumbnail.png",
-    "images": [
-      "https://i.dummyjson.com/data/products/21/1.png",
-      "https://i.dummyjson.com/data/products/21/2.jpg",
-      "https://i.dummyjson.com/data/products/21/3.jpg"
-    ]
-  },
-  {
-    "id": 22,
-    "title": "Elbow Macaroni - 400 gm",
-    "description": "Product details of Bake Parlor Big Elbow Macaroni - 400 gm",
-    "price": 14,
-    "discountPercentage": 15.58,
-    "rating": 4.57,
-    "stock": 146,
-    "brand": "Bake Parlor Big",
-    "category": "groceries",
-    "thumbnail": "https://i.dummyjson.com/data/products/22/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/22/1.jpg",
-      "https://i.dummyjson.com/data/products/22/2.jpg",
-      "https://i.dummyjson.com/data/products/22/3.jpg"
-    ]
-  },
-  {
-    "id": 23,
-    "title": "Orange Essence Food Flavou",
-    "description": "Specifications of Orange Essence Food Flavour For Cakes and Baking Food Item",
-    "price": 14,
-    "discountPercentage": 8.04,
-    "rating": 4.85,
-    "stock": 26,
-    "brand": "Baking Food Items",
-    "category": "groceries",
-    "thumbnail": "https://i.dummyjson.com/data/products/23/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/23/1.jpg",
-      "https://i.dummyjson.com/data/products/23/2.jpg",
-      "https://i.dummyjson.com/data/products/23/3.jpg",
-      "https://i.dummyjson.com/data/products/23/4.jpg",
-      "https://i.dummyjson.com/data/products/23/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 24,
-    "title": "cereals muesli fruit nuts",
-    "description": "original fauji cereal muesli 250gm box pack original fauji cereals muesli fruit nuts flakes breakfast cereal break fast faujicereals cerels cerel foji fouji",
-    "price": 46,
-    "discountPercentage": 16.8,
-    "rating": 4.94,
-    "stock": 113,
-    "brand": "fauji",
-    "category": "groceries",
-    "thumbnail": "https://i.dummyjson.com/data/products/24/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/24/1.jpg",
-      "https://i.dummyjson.com/data/products/24/2.jpg",
-      "https://i.dummyjson.com/data/products/24/3.jpg",
-      "https://i.dummyjson.com/data/products/24/4.jpg",
-      "https://i.dummyjson.com/data/products/24/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 25,
-    "title": "Gulab Powder 50 Gram",
-    "description": "Dry Rose Flower Powder Gulab Powder 50 Gram • Treats Wounds",
-    "price": 70,
-    "discountPercentage": 13.58,
-    "rating": 4.87,
-    "stock": 47,
-    "brand": "Dry Rose",
-    "category": "groceries",
-    "thumbnail": "https://i.dummyjson.com/data/products/25/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/25/1.png",
-      "https://i.dummyjson.com/data/products/25/2.jpg",
-      "https://i.dummyjson.com/data/products/25/3.png",
-      "https://i.dummyjson.com/data/products/25/4.jpg",
-      "https://i.dummyjson.com/data/products/25/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 26,
-    "title": "Plant Hanger For Home",
-    "description": "Boho Decor Plant Hanger For Home Wall Decoration Macrame Wall Hanging Shelf",
-    "price": 41,
-    "discountPercentage": 17.86,
-    "rating": 4.08,
-    "stock": 131,
-    "brand": "Boho Decor",
-    "category": "home-decoration",
-    "thumbnail": "https://i.dummyjson.com/data/products/26/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/26/1.jpg",
-      "https://i.dummyjson.com/data/products/26/2.jpg",
-      "https://i.dummyjson.com/data/products/26/3.jpg",
-      "https://i.dummyjson.com/data/products/26/4.jpg",
-      "https://i.dummyjson.com/data/products/26/5.jpg",
-      "https://i.dummyjson.com/data/products/26/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 27,
-    "title": "Flying Wooden Bird",
-    "description": "Package Include 6 Birds with Adhesive Tape Shape: 3D Shaped Wooden Birds Material: Wooden MDF, Laminated 3.5mm",
-    "price": 51,
-    "discountPercentage": 15.58,
-    "rating": 4.41,
-    "stock": 17,
-    "brand": "Flying Wooden",
-    "category": "home-decoration",
-    "thumbnail": "https://i.dummyjson.com/data/products/27/thumbnail.webp",
-    "images": [
-      "https://i.dummyjson.com/data/products/27/1.jpg",
-      "https://i.dummyjson.com/data/products/27/2.jpg",
-      "https://i.dummyjson.com/data/products/27/3.jpg",
-      "https://i.dummyjson.com/data/products/27/4.jpg",
-      "https://i.dummyjson.com/data/products/27/thumbnail.webp"
-    ]
-  },
-  {
-    "id": 28,
-    "title": "3D Embellishment Art Lamp",
-    "description": "3D led lamp sticker Wall sticker 3d wall art light on/off button  cell operated (included)",
-    "price": 20,
-    "discountPercentage": 16.49,
-    "rating": 4.82,
-    "stock": 54,
-    "brand": "LED Lights",
-    "category": "home-decoration",
-    "thumbnail": "https://i.dummyjson.com/data/products/28/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/28/1.jpg",
-      "https://i.dummyjson.com/data/products/28/2.jpg",
-      "https://i.dummyjson.com/data/products/28/3.png",
-      "https://i.dummyjson.com/data/products/28/4.jpg",
-      "https://i.dummyjson.com/data/products/28/thumbnail.jpg"
-    ]
-  },
-  {
-    "id": 29,
-    "title": "Handcraft Chinese style",
-    "description": "Handcraft Chinese style art luxury palace hotel villa mansion home decor ceramic vase with brass fruit plate",
-    "price": 60,
-    "discountPercentage": 15.34,
-    "rating": 4.44,
-    "stock": 7,
-    "brand": "luxury palace",
-    "category": "home-decoration",
-    "thumbnail": "https://i.dummyjson.com/data/products/29/thumbnail.webp",
-    "images": [
-      "https://i.dummyjson.com/data/products/29/1.jpg",
-      "https://i.dummyjson.com/data/products/29/2.jpg",
-      "https://i.dummyjson.com/data/products/29/3.webp",
-      "https://i.dummyjson.com/data/products/29/4.webp",
-      "https://i.dummyjson.com/data/products/29/thumbnail.webp"
-    ]
-  },
-  {
-    "id": 30,
-    "title": "Key Holder",
-    "description": "Attractive DesignMetallic materialFour key hooksReliable & DurablePremium Quality",
-    "price": 30,
-    "discountPercentage": 2.92,
-    "rating": 4.92,
-    "stock": 54,
-    "brand": "Golden",
-    "category": "home-decoration",
-    "thumbnail": "https://i.dummyjson.com/data/products/30/thumbnail.jpg",
-    "images": [
-      "https://i.dummyjson.com/data/products/30/1.jpg",
-      "https://i.dummyjson.com/data/products/30/2.jpg",
-      "https://i.dummyjson.com/data/products/30/3.jpg",
-      "https://i.dummyjson.com/data/products/30/thumbnail.jpg"
-    ]
-  }
-]
-
-
-export default function ProductList() {
-  //const count = useSelector(selectCount);
-  //const dispatch = useDispatch();
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+export default function ProductDetail() {
+  const [selectedColor, setSelectedColor] = useState(product.colors[0])
+  const [selectedSize, setSelectedSize] = useState(product.sizes[2])
 
   return (
     <div className="bg-white">
-      <div>
-        {/* Mobile filter dialog */}
-        <Transition.Root show={mobileFiltersOpen} as={Fragment}>
-          <Dialog
-            as="div"
-            className="relative z-40 lg:hidden"
-            onClose={setMobileFiltersOpen}
-          >
-            <Transition.Child
-              as={Fragment}
-              enter="transition-opacity ease-linear duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity ease-linear duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <div className="fixed inset-0 bg-black bg-opacity-25" />
-            </Transition.Child>
+      <div className="pt-6">
+        <nav aria-label="Breadcrumb">
+          <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            {product.breadcrumbs.map((breadcrumb) => (
+              <li key={breadcrumb.id}>
+                <div className="flex items-center">
+                  <a href={breadcrumb.href} className="mr-2 text-sm font-medium text-gray-900">
+                    {breadcrumb.name}
+                  </a>
+                  <svg
+                    width={16}
+                    height={20}
+                    viewBox="0 0 16 20"
+                    fill="currentColor"
+                    aria-hidden="true"
+                    className="h-5 w-4 text-gray-300"
+                  >
+                    <path d="M5.697 4.34L8.98 16.532h1.327L7.025 4.341H5.697z" />
+                  </svg>
+                </div>
+              </li>
+            ))}
+            <li className="text-sm">
+              <a href={product.href} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
+                {product.name}
+              </a>
+            </li>
+          </ol>
+        </nav>
 
-            <div className="fixed inset-0 z-40 flex">
-              <Transition.Child
-                as={Fragment}
-                enter="transition ease-in-out duration-300 transform"
-                enterFrom="translate-x-full"
-                enterTo="translate-x-0"
-                leave="transition ease-in-out duration-300 transform"
-                leaveFrom="translate-x-0"
-                leaveTo="translate-x-full"
-              >
-                <Dialog.Panel className="relative ml-auto flex h-full w-full max-w-xs flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl">
-                  <div className="flex items-center justify-between px-4">
-                    <h2 className="text-lg font-medium text-gray-900">
-                      Filters
-                    </h2>
-                    <button
-                      type="button"
-                      className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
-                      onClick={() => setMobileFiltersOpen(false)}
-                    >
-                      <span className="sr-only">Close menu</span>
-                      <XMarkIcon className="h-6 w-6" aria-hidden="true" />
-                    </button>
-                  </div>
-
-                  {/* Filters */}
-                  <form className="mt-4 border-t border-gray-200">
-                    {filters.map((section) => (
-                      <Disclosure
-                        as="div"
-                        key={section.id}
-                        className="border-t border-gray-200 px-4 py-6"
-                      >
-                        {({ open }) => (
-                          <>
-                            <h3 className="-mx-2 -my-3 flow-root">
-                              <Disclosure.Button className="flex w-full items-center justify-between bg-white px-2 py-3 text-gray-400 hover:text-gray-500">
-                                <span className="font-medium text-gray-900">
-                                  {section.name}
-                                </span>
-                                <span className="ml-6 flex items-center">
-                                  {open ? (
-                                    <MinusIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  ) : (
-                                    <PlusIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  )}
-                                </span>
-                              </Disclosure.Button>
-                            </h3>
-                            <Disclosure.Panel className="pt-6">
-                              <div className="space-y-6">
-                                {section.options.map((option, optionIdx) => (
-                                  <div
-                                    key={option.value}
-                                    className="flex items-center"
-                                  >
-                                    <input
-                                      id={`filter-mobile-${section.id}-${optionIdx}`}
-                                      name={`${section.id}[]`}
-                                      defaultValue={option.value}
-                                      type="checkbox"
-                                      defaultChecked={option.checked}
-                                      className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                    />
-                                    <label
-                                      htmlFor={`filter-mobile-${section.id}-${optionIdx}`}
-                                      className="ml-3 min-w-0 flex-1 text-gray-500"
-                                    >
-                                      {option.label}
-                                    </label>
-                                  </div>
-                                ))}
-                              </div>
-                            </Disclosure.Panel>
-                          </>
-                        )}
-                      </Disclosure>
-                    ))}
-                  </form>
-                </Dialog.Panel>
-              </Transition.Child>
+        {/* Image gallery */}
+        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
+          <div className="aspect-h-4 aspect-w-3 hidden overflow-hidden rounded-lg lg:block">
+            <img
+              src={product.images[0].src}
+              alt={product.images[0].alt}
+              className="h-full w-full object-cover object-center"
+            />
+          </div>
+          <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-8">
+            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+              <img
+                src={product.images[1].src}
+                alt={product.images[1].alt}
+                className="h-full w-full object-cover object-center"
+              />
             </div>
-          </Dialog>
-        </Transition.Root>
+            <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+              <img
+                src={product.images[2].src}
+                alt={product.images[2].alt}
+                className="h-full w-full object-cover object-center"
+              />
+            </div>
+          </div>
+          <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
+            <img
+              src={product.images[3].src}
+              alt={product.images[3].alt}
+              className="h-full w-full object-cover object-center"
+            />
+          </div>
+        </div>
 
-        <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
-            <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              All Products
-            </h1>
+        {/* Product info */}
+        <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+          <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.name}</h1>
+          </div>
 
-            <div className="flex items-center">
-              <Menu as="div" className="relative inline-block text-left">
-                <div>
-                  <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                    Sort
-                    <ChevronDownIcon
-                      className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+          {/* Options */}
+          <div className="mt-4 lg:row-span-3 lg:mt-0">
+            <h2 className="sr-only">Product information</h2>
+            <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
+
+            {/* Reviews */}
+            <div className="mt-6">
+              <h3 className="sr-only">Reviews</h3>
+              <div className="flex items-center">
+                <div className="flex items-center">
+                  {[0, 1, 2, 3, 4].map((rating) => (
+                    <StarIcon
+                      key={rating}
+                      className={classNames(
+                        reviews.average > rating ? 'text-gray-900' : 'text-gray-200',
+                        'h-5 w-5 flex-shrink-0'
+                      )}
                       aria-hidden="true"
                     />
-                  </Menu.Button>
+                  ))}
                 </div>
+                <p className="sr-only">{reviews.average} out of 5 stars</p>
+                <a href={reviews.href} className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                  {reviews.totalCount} reviews
+                </a>
+              </div>
+            </div>
 
-                <Transition
-                  as={Fragment}
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
-                      {sortOptions.map((option) => (
-                        <Menu.Item key={option.name}>
-                          {({ active }) => (
-                            <a
-                              href={option.href}
-                              className={classNames(
-                                option.current
-                                  ? 'font-medium text-gray-900'
-                                  : 'text-gray-500',
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm'
-                              )}
-                            >
-                              {option.name}
-                            </a>
+            <form className="mt-10">
+              {/* Colors */}
+              <div>
+                <h3 className="text-sm font-medium text-gray-900">Color</h3>
+
+                <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-4">
+                  <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
+                  <div className="flex items-center space-x-3">
+                    {product.colors.map((color) => (
+                      <RadioGroup.Option
+                        key={color.name}
+                        value={color}
+                        className={({ active, checked }) =>
+                          classNames(
+                            color.selectedClass,
+                            active && checked ? 'ring ring-offset-1' : '',
+                            !active && checked ? 'ring-2' : '',
+                            'relative -m-0.5 flex cursor-pointer items-center justify-center rounded-full p-0.5 focus:outline-none'
+                          )
+                        }
+                      >
+                        <RadioGroup.Label as="span" className="sr-only">
+                          {color.name}
+                        </RadioGroup.Label>
+                        <span
+                          aria-hidden="true"
+                          className={classNames(
+                            color.class,
+                            'h-8 w-8 rounded-full border border-black border-opacity-10'
                           )}
-                        </Menu.Item>
-                      ))}
-                    </div>
-                  </Menu.Items>
-                </Transition>
-              </Menu>
-
-              <button
-                type="button"
-                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7"
-              >
-                <span className="sr-only">View grid</span>
-                <Squares2X2Icon className="h-5 w-5" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                className="-m-2 ml-4 p-2 text-gray-400 hover:text-gray-500 sm:ml-6 lg:hidden"
-                onClick={() => setMobileFiltersOpen(true)}
-              >
-                <span className="sr-only">Filters</span>
-                <FunnelIcon className="h-5 w-5" aria-hidden="true" />
-              </button>
-            </div>
-          </div>
-
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
-            <h2 id="products-heading" className="sr-only">
-              Products
-            </h2>
-
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              {/* Filters */}
-              <form className="hidden lg:block">
-                {filters.map((section) => (
-                  <Disclosure
-                    as="div"
-                    key={section.id}
-                    className="border-b border-gray-200 py-6"
-                  >
-                    {({ open }) => (
-                      <>
-                        <h3 className="-my-3 flow-root">
-                          <Disclosure.Button className="flex w-full items-center justify-between bg-white py-3 text-sm text-gray-400 hover:text-gray-500">
-                            <span className="font-medium text-gray-900">
-                              {section.name}
-                            </span>
-                            <span className="ml-6 flex items-center">
-                              {open ? (
-                                <MinusIcon
-                                  className="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              ) : (
-                                <PlusIcon
-                                  className="h-5 w-5"
-                                  aria-hidden="true"
-                                />
-                              )}
-                            </span>
-                          </Disclosure.Button>
-                        </h3>
-                        <Disclosure.Panel className="pt-6">
-                          <div className="space-y-4">
-                            {section.options.map((option, optionIdx) => (
-                              <div
-                                key={option.value}
-                                className="flex items-center"
-                              >
-                                <input
-                                  id={`filter-${section.id}-${optionIdx}`}
-                                  name={`${section.id}[]`}
-                                  defaultValue={option.value}
-                                  type="checkbox"
-                                  defaultChecked={option.checked}
-                                  className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-                                />
-                                <label
-                                  htmlFor={`filter-${section.id}-${optionIdx}`}
-                                  className="ml-3 text-sm text-gray-600"
-                                >
-                                  {option.label}
-                                </label>
-                              </div>
-                            ))}
-                          </div>
-                        </Disclosure.Panel>
-                      </>
-                    )}
-                  </Disclosure>
-                ))}
-              </form>
-
-              {/* Product grid */}
-              <div className="lg:col-span-3">
-                {/* This is our products list  */}
-                <div className="bg-white">
-                  <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
-                    <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-                      {products.map((product) => (
-                        <Link to="/product-detail">
-                        <div key={product.id} className="group relative border-solid border-2 p-2 border-gray-200">
-                          <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
-                            <img
-                              src={product.thumbnail}
-                              alt={product.title}
-                              className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                            />
-                          </div>
-                          <div className="mt-4 flex justify-between">
-                            <div>
-                              <h3 className="text-sm text-gray-700">
-                                <a href={product.thumbnail}>
-                                  <span
-                                    aria-hidden="true"
-                                    className="absolute inset-0"
-                                  />
-                                  {product.name}
-                                </a>
-                              </h3>
-                              <StarIcon className='w-6 h-6 inline'></StarIcon>
-                              <span className='align-bottom'>{product.rating}</span>
-                            
-                            </div>
-                            <div>
-
-                            <p className="text-sm font-medium text-gray-900">
-                            ${Math.round(product.price*(1-product.discountPercentage/100))}
-                            </p>
-
-                            <p className="text-sm block line-through font-medium text-gray-400">
-                            ${product.price}
-                            </p>
-                            </div>
-                          </div>
-
-                        </div>
-                        </Link>
-                      ))}
-                    </div>
+                        />
+                      </RadioGroup.Option>
+                    ))}
                   </div>
-                </div>
+                </RadioGroup>
               </div>
-              {/* Product grid end */}
-            </div>
-          </section>
 
-          {/* section of product and filters ends */}
-          <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
-            <div className="flex flex-1 justify-between sm:hidden">
-              <a
-                href="#"
-                className="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Previous
-              </a>
-              <a
-                href="#"
-                className="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Next
-              </a>
-            </div>
-            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm text-gray-700">
-                  Showing <span className="font-medium">1</span> to{' '}
-                  <span className="font-medium">10</span> of{' '}
-                  <span className="font-medium">97</span> results
-                </p>
+              {/* Sizes */}
+              <div className="mt-10">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-sm font-medium text-gray-900">Size</h3>
+                  <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    Size guide
+                  </a>
+                </div>
+
+                <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
+                  <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                  <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
+                    {product.sizes.map((size) => (
+                      <RadioGroup.Option
+                        key={size.name}
+                        value={size}
+                        disabled={!size.inStock}
+                        className={({ active }) =>
+                          classNames(
+                            size.inStock
+                              ? 'cursor-pointer bg-white text-gray-900 shadow-sm'
+                              : 'cursor-not-allowed bg-gray-50 text-gray-200',
+                            active ? 'ring-2 ring-indigo-500' : '',
+                            'group relative flex items-center justify-center rounded-md border py-3 px-4 text-sm font-medium uppercase hover:bg-gray-50 focus:outline-none sm:flex-1 sm:py-6'
+                          )
+                        }
+                      >
+                        {({ active, checked }) => (
+                          <>
+                            <RadioGroup.Label as="span">{size.name}</RadioGroup.Label>
+                            {size.inStock ? (
+                              <span
+                                className={classNames(
+                                  active ? 'border' : 'border-2',
+                                  checked ? 'border-indigo-500' : 'border-transparent',
+                                  'pointer-events-none absolute -inset-px rounded-md'
+                                )}
+                                aria-hidden="true"
+                              />
+                            ) : (
+                              <span
+                                aria-hidden="true"
+                                className="pointer-events-none absolute -inset-px rounded-md border-2 border-gray-200"
+                              >
+                                <svg
+                                  className="absolute inset-0 h-full w-full stroke-2 text-gray-200"
+                                  viewBox="0 0 100 100"
+                                  preserveAspectRatio="none"
+                                  stroke="currentColor"
+                                >
+                                  <line x1={0} y1={100} x2={100} y2={0} vectorEffect="non-scaling-stroke" />
+                                </svg>
+                              </span>
+                            )}
+                          </>
+                        )}
+                      </RadioGroup.Option>
+                    ))}
+                  </div>
+                </RadioGroup>
               </div>
-              <div>
-                <nav
-                  className="isolate inline-flex -space-x-px rounded-md shadow-sm"
-                  aria-label="Pagination"
-                >
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    <span className="sr-only">Previous</span>
-                    <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
-                  </a>
-                  {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-                  <a
-                    href="#"
-                    aria-current="page"
-                    className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                  >
-                    1
-                  </a>
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    2
-                  </a>
-                
-                  <a
-                    href="#"
-                    className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
-                  >
-                    <span className="sr-only">Next</span>
-                    <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
-                  </a>
-                </nav>
+
+              <button
+                type="submit"
+                className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Add to Cart
+              </button>
+            </form>
+          </div>
+
+          <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
+            {/* Description and details */}
+            <div>
+              <h3 className="sr-only">Description</h3>
+
+              <div className="space-y-6">
+                <p className="text-base text-gray-900">{product.description}</p>
+              </div>
+            </div>
+
+            <div className="mt-10">
+              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+
+              <div className="mt-4">
+                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
+                  {product.highlights.map((highlight) => (
+                    <li key={highlight} className="text-gray-400">
+                      <span className="text-gray-600">{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-10">
+              <h2 className="text-sm font-medium text-gray-900">Details</h2>
+
+              <div className="mt-4 space-y-6">
+                <p className="text-sm text-gray-600">{product.details}</p>
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
-  );
+  )
 }
