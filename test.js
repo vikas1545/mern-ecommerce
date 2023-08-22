@@ -1,5 +1,5 @@
 
-products=[
+const products=[
     {
       "id": 1,
       "title": "iPhone 9",
@@ -554,5 +554,10 @@ products=[
     }
   ]
   
-  const prod= products.map((p)=>p.brand))
-  console.log(prod)
+const categories = new Set(products.map((p)=>p.brand));
+
+console.log(categories)
+
+const sub=categories.map((c)=> ({value:c, label:c.split('-').join(' '),checked:false}))
+
+console.log(sub)

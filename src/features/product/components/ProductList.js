@@ -3,15 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon, Squares2X2Icon } from '@heroicons/react/20/solid'
-import { ChevronLeftIcon, ChevronRightIcon,StarIcon } from '@heroicons/react/20/solid'
+import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom';
-import { selectAllProducts,fetchAllProductsAsync } from '../productSlice';
+import { selectAllProducts, fetchAllProductsAsync, fetchProductsByFiltersAsync } from '../productSlice';
+import { handler } from '@tailwindcss/aspect-ratio';
 const sortOptions = [
-    { name: 'Most Popular', href: '#', current: true },
-    { name: 'Best Rating', href: '#', current: false },
-    { name: 'Newest', href: '#', current: false },
-    { name: 'Price: Low to High', href: '#', current: false },
-    { name: 'Price: High to Low', href: '#', current: false },
+    { name: 'Best Rating', sort: 'rating', order: 'desc', current: false },
+    { name: 'Price: Low to High', sort: 'price', order: 'asc', current: false },
+    { name: 'Price: High to Low', sort: 'price', order: 'desc', current: false },
 ]
 const subCategories = [
     { name: 'Totes', href: '#' },
@@ -22,88 +21,120 @@ const subCategories = [
 ]
 const filters = [
     {
-        id: 'color',
-        name: 'Color',
-        options: [
-            { value: 'white', label: 'White', checked: false },
-            { value: 'beige', label: 'Beige', checked: false },
-            { value: 'blue', label: 'Blue', checked: true },
-            { value: 'brown', label: 'Brown', checked: false },
-            { value: 'green', label: 'Green', checked: false },
-            { value: 'purple', label: 'Purple', checked: false },
-        ],
-    },
-    {
         id: 'category',
         name: 'Category',
-        options: [
-            { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-            { value: 'sale', label: 'Sale', checked: false },
-            { value: 'travel', label: 'Travel', checked: true },
-            { value: 'organization', label: 'Organization', checked: false },
-            { value: 'accessories', label: 'Accessories', checked: false },
-        ],
+        options: [{ value: 'smartphones', label: 'smartphones', checked: false },
+        { value: 'laptops', label: 'laptops', checked: false },
+        { value: 'fragrances', label: 'fragrances', checked: false },
+        { value: 'skincare', label: 'skincare', checked: false },
+        { value: 'groceries', label: 'groceries', checked: false },
+        {
+            value: 'home-decoration',
+            label: 'home decoration',
+            checked: false
+        }],
     },
     {
-        id: 'size',
-        name: 'Size',
-        options: [
-            { value: '2l', label: '2L', checked: false },
-            { value: '6l', label: '6L', checked: false },
-            { value: '12l', label: '12L', checked: false },
-            { value: '18l', label: '18L', checked: false },
-            { value: '20l', label: '20L', checked: false },
-            { value: '40l', label: '40L', checked: true },
-        ],
-    },
+        id: 'brand',
+        name: 'Brand',
+        options: [{ value: 'Apple', label: 'Apple', checked: false },
+        { value: 'Samsung', label: 'Samsung', checked: false },
+        { value: 'OPPO', label: 'OPPO', checked: false },
+        { value: 'Huawei', label: 'Huawei', checked: false },
+        {
+            value: 'Microsoft Surface',
+            label: 'Microsoft Surface',
+            checked: false
+        },
+        { value: 'Infinix', label: 'Infinix', checked: false },
+        { value: 'HP Pavilion', label: 'HP Pavilion', checked: false },
+        {
+            value: 'Impression of Acqua Di Gio',
+            label: 'Impression of Acqua Di Gio',
+            checked: false
+        },
+        { value: 'Royal_Mirage', label: 'Royal_Mirage', checked: false },
+        {
+            value: 'Fog Scent Xpressio',
+            label: 'Fog Scent Xpressio',
+            checked: false
+        },
+        { value: 'Al Munakh', label: 'Al Munakh', checked: false },
+        {
+            value: 'Lord - Al-Rehab',
+            label: 'Lord   Al Rehab',
+            checked: false
+        },
+        {
+            value: 'L\'Oreal Paris',
+            label: 'L\'Oreal Paris',
+            checked: false
+        },
+        { value: 'Hemani Tea', label: 'Hemani Tea', checked: false },
+        { value: 'Dermive', label: 'Dermive', checked: false },
+        {
+            value: 'ROREC White Rice',
+            label: 'ROREC White Rice',
+            checked: false
+        },
+        { value: 'Fair & Clear', label: 'Fair & Clear', checked: false },
+        { value: 'Saaf & Khaas', label: 'Saaf & Khaas', checked: false },
+        {
+            value: 'Bake Parlor Big',
+            label: 'Bake Parlor Big',
+            checked: false
+        },
+        {
+            value: 'Baking Food Items',
+            label: 'Baking Food Items',
+            checked: false
+        },
+        { value: 'fauji', label: 'fauji', checked: false },
+        { value: 'Dry Rose', label: 'Dry Rose', checked: false },
+        { value: 'Boho Decor', label: 'Boho Decor', checked: false },
+        {
+            value: 'Flying Wooden',
+            label: 'Flying Wooden',
+            checked: false
+        },
+        { value: 'LED Lights', label: 'LED Lights', checked: false },
+        {
+            value: 'luxury palace',
+            label: 'luxury palace',
+            checked: false
+        },
+        { value: 'Golden', label: 'Golden', checked: false }],
+    }
 ]
 
-// const products = [
-//     {
-//         id: 1,
-//         name: 'Basic Tee',
-//         href: '#',
-//         imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-//         imageAlt: "Front of men's Basic Tee in black.",
-//         price: '$35',
-//         color: 'Black',
-//     },
-//     {
-//         id: 2,
-//         name: 'Basic Tee',
-//         href: '#',
-//         imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-//         imageAlt: "Front of men's Basic Tee in black.",
-//         price: '$35',
-//         color: 'Black',
-//     },
-//     {
-//         id: 3,
-//         name: 'Basic Tee',
-//         href: '#',
-//         imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg',
-//         imageAlt: "Front of men's Basic Tee in black.",
-//         price: '$35',
-//         color: 'Black',
-//     },
-//     // More products...
-// ]
 
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-
-
 export function ProductList() {
     const products = useSelector(selectAllProducts);
     const dispatch = useDispatch();
-    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+    const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+    const [filter, setFilter] = useState({});
 
-
-     useEffect(()=> {
+    useEffect(() => {
         dispatch(fetchAllProductsAsync())
-     },[dispatch])
+    }, [dispatch])
+
+    const handleFilter = (e, option, section) => {
+        const newFilter = { ...filter, [section.id]: option.value };
+        setFilter(newFilter);
+        dispatch(fetchProductsByFiltersAsync(newFilter))
+        console.log(option.value);
+        console.log(section.id);
+    }
+    const handleShort = (e, option) => {
+        console.log(option)
+        const newFilter = { ...filter, _sort: option.sort, _order: option.order };
+        setFilter(newFilter);
+        dispatch(fetchProductsByFiltersAsync(newFilter))
+    }
 
     return (
         <div>
@@ -230,8 +261,8 @@ export function ProductList() {
                                                     {sortOptions.map((option) => (
                                                         <Menu.Item key={option.name}>
                                                             {({ active }) => (
-                                                                <a
-                                                                    href={option.href}
+                                                                <p
+                                                                    onClick={e => handleShort(e, option)}
                                                                     className={classNames(
                                                                         option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                                                                         active ? 'bg-gray-100' : '',
@@ -239,7 +270,7 @@ export function ProductList() {
                                                                     )}
                                                                 >
                                                                     {option.name}
-                                                                </a>
+                                                                </p>
                                                             )}
                                                         </Menu.Item>
                                                     ))}
@@ -295,6 +326,7 @@ export function ProductList() {
                                                                             name={`${section.id}[]`}
                                                                             defaultValue={option.value}
                                                                             type="checkbox"
+                                                                            onChange={e => handleFilter(e, option, section)}
                                                                             defaultChecked={option.checked}
                                                                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                                                         />
@@ -322,42 +354,42 @@ export function ProductList() {
                                                 <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
                                                     {products.map((product) => (
                                                         <Link to="/product-detail">
-                                                        <div key={product.id} className="group relative border-solid border-2 p-2 border-gray-200">
-                          <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
-                            <img
-                              src={product.thumbnail}
-                              alt={product.title}
-                              className="h-full w-full object-cover object-center lg:h-full lg:w-full"
-                            />
-                          </div>
-                          <div className="mt-4 flex justify-between">
-                            <div>
-                              <h3 className="text-sm text-gray-700">
-                                <a href={product.thumbnail}>
-                                  <span
-                                    aria-hidden="true"
-                                    className="absolute inset-0"
-                                  />
-                                  {product.name}
-                                </a>
-                              </h3>
-                              <StarIcon className='w-6 h-6 inline'></StarIcon>
-                              <span className='align-bottom'>{product.rating}</span>
-                            
-                            </div>
-                            <div>
+                                                            <div key={product.id} className="group relative border-solid border-2 p-2 border-gray-200">
+                                                                <div className="min-h-60 aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-60">
+                                                                    <img
+                                                                        src={product.thumbnail}
+                                                                        alt={product.title}
+                                                                        className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                                                                    />
+                                                                </div>
+                                                                <div className="mt-4 flex justify-between">
+                                                                    <div>
+                                                                        <h3 className="text-sm text-gray-700">
+                                                                            <div href={product.thumbnail}>
+                                                                                <span
+                                                                                    aria-hidden="true"
+                                                                                    className="absolute inset-0"
+                                                                                />
+                                                                                {product.name}
+                                                                            </div>
+                                                                        </h3>
+                                                                        <StarIcon className='w-6 h-6 inline'></StarIcon>
+                                                                        <span className='align-bottom'>{product.rating}</span>
 
-                            <p className="text-sm font-medium text-gray-900">
-                            ${Math.round(product.price*(1-product.discountPercentage/100))}
-                            </p>
+                                                                    </div>
+                                                                    <div>
 
-                            <p className="text-sm block line-through font-medium text-gray-400">
-                            ${product.price}
-                            </p>
-                            </div>
-                          </div>
+                                                                        <p className="text-sm font-medium text-gray-900">
+                                                                            ${Math.round(product.price * (1 - product.discountPercentage / 100))}
+                                                                        </p>
 
-                        </div>
+                                                                        <p className="text-sm block line-through font-medium text-gray-400">
+                                                                            ${product.price}
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
                                                         </Link>
                                                     ))}
                                                 </div>
