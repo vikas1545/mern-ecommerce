@@ -1,4 +1,4 @@
-import { ProductList } from "../product-list/ProductList";
+import { ProductList } from "../product/components/ProductList";
 import Navbar from "../navbar/Navbar";
 function Home() {
     return ( 
