@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Counter } from './features/counter/Counter';
 import './App.css';
 import { ProductList } from './features/product/components/ProductList';
@@ -11,11 +11,15 @@ import { Cart } from './features/cart/Cart';
 import CartPage from './features/pages/CartPage';
 import Checkout from './features/pages/Checkout';
 import ProductDetailPage from './features/pages/ProductDetailPage';
-
+import Protected from './features/auth/components/Protected';
+import { selectLoggedInUser } from './features/auth/authSlice';
+import { fetchItemsByUserIdAsync } from './features/cart/cartSlice';
+import { Dispatch } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (<Home/>),
+    element: (<Protected><Home/></Protected>),
   },
   {
     path: "/login",
@@ -27,22 +31,32 @@ const router = createBrowserRouter([
   },
   {
     path: "/cart",
-    element: (<CartPage/>),
+    element: (<Protected><CartPage/></Protected>),
   },
   { 
     path: '/checkout',
-    element: <Checkout/>,
+    element: (<Protected><Checkout/></Protected>),
   },
   { 
-    path: '/product-detail',
-    element: <ProductDetailPage/>,
+    path: '/product-detail/:id',
+    element: (<Protected><ProductDetailPage/></Protected>),
   },
   
 ]);
 
 
 
+
 function App() {
+  const dispatch = useDispatch();
+  const user = useSelector(selectLoggedInUser);
+  
+   useEffect(()=>{
+      if(user) {
+        dispatch(fetchItemsByUserIdAsync(user.id))
+      }
+    },[dispatch,user])
+
   return (
     <div className="App">
       <RouterProvider router={router} />
