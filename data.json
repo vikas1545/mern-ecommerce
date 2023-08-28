@@ -2013,44 +2013,147 @@
     {
       "email": "vikaskumar.vk0612@gmail.com",
       "password": "Vikas@1545",
-      "id": 1
+      "addresses": [
+        {
+          "name": "vikas kumar",
+          "email": "vikaskumar.vk0612@gmail.com",
+          "phone": "8825134151",
+          "street": "168 ",
+          "city": "noida",
+          "state": "up",
+          "pincode": "201305"
+        },
+        {
+          "name": "vikas kumar",
+          "email": "vikaskumar.vk0612@gmail.com",
+          "phone": "8825134151",
+          "street": "laxmi nagar",
+          "city": "delhi",
+          "state": "new delhi",
+          "pincode": "110001"
+        }
+      ],
+      "id": 1,
+      "data": {
+        "name": "vikas kumar",
+        "email": "vikaskumar.vk0612@gmail.com",
+        "phone": "8825134151",
+        "street": "168 ",
+        "city": "noida",
+        "state": "up",
+        "pincode": "201305"
+      }
     },
     {
       "email": "vikaskumar.vk0612@gmail.com",
       "password": "Vikas@1545",
+      "addresses": [],
       "id": 2
     },
     {
       "email": "vikaskumar.vk0612@gmail.com",
       "password": "Vikas@1545",
+      "addresses": [],
       "id": 3
     },
     {
       "email": "vikasnationaladmin3210@gmail.com",
       "password": "Vikas@1545",
+      "addresses": [],
       "id": 4
     }
   ],
   "cart": [
     {
-      "id": 2,
-      "title": "iPhone X",
-      "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
-      "price": 899,
-      "discountPercentage": 17.94,
-      "rating": 4.44,
-      "stock": 34,
-      "brand": "Apple",
+      "title": "Huawei P30",
+      "description": "Huawei’s re-badged P30 Pro New Edition was officially unveiled yesterday in Germany and now the device has made its way to the UK.",
+      "price": 499,
+      "discountPercentage": 10.58,
+      "rating": 4.09,
+      "stock": 32,
+      "brand": "Huawei",
       "category": "smartphones",
-      "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+      "thumbnail": "https://i.dummyjson.com/data/products/5/thumbnail.jpg",
       "images": [
-        "https://i.dummyjson.com/data/products/2/1.jpg",
-        "https://i.dummyjson.com/data/products/2/2.jpg",
-        "https://i.dummyjson.com/data/products/2/3.jpg",
-        "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+        "https://i.dummyjson.com/data/products/5/1.jpg",
+        "https://i.dummyjson.com/data/products/5/2.jpg",
+        "https://i.dummyjson.com/data/products/5/3.jpg"
       ],
-      "quantity": 3,
-      "user": 1
+      "quantity": 2,
+      "user": 1,
+      "id": 1
+    }
+  ],
+  "orders": [
+    {
+      "items": [
+        {
+          "title": "Huawei P30",
+          "description": "Huawei’s re-badged P30 Pro New Edition was officially unveiled yesterday in Germany and now the device has made its way to the UK.",
+          "price": 499,
+          "discountPercentage": 10.58,
+          "rating": 4.09,
+          "stock": 32,
+          "brand": "Huawei",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/5/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/5/1.jpg",
+            "https://i.dummyjson.com/data/products/5/2.jpg",
+            "https://i.dummyjson.com/data/products/5/3.jpg"
+          ],
+          "quantity": 2,
+          "user": 1,
+          "id": 1
+        }
+      ],
+      "totalAmount": 998,
+      "totalItems": 2,
+      "user": {
+        "email": "vikaskumar.vk0612@gmail.com",
+        "password": "Vikas@1545",
+        "addresses": [
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "phone": "8825134151",
+            "street": "168 ",
+            "city": "noida",
+            "state": "up",
+            "pincode": "201305"
+          },
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "phone": "8825134151",
+            "street": "laxmi nagar",
+            "city": "delhi",
+            "state": "new delhi",
+            "pincode": "110001"
+          }
+        ],
+        "id": 1,
+        "data": {
+          "name": "vikas kumar",
+          "email": "vikaskumar.vk0612@gmail.com",
+          "phone": "8825134151",
+          "street": "168 ",
+          "city": "noida",
+          "state": "up",
+          "pincode": "201305"
+        }
+      },
+      "paymentMethod": "cash",
+      "selectedAddress": {
+        "name": "vikas kumar",
+        "email": "vikaskumar.vk0612@gmail.com",
+        "phone": "8825134151",
+        "street": "168 ",
+        "city": "noida",
+        "state": "up",
+        "pincode": "201305"
+      },
+      "id": 1
     }
   ]
 }
