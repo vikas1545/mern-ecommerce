@@ -4,6 +4,7 @@ import { createOrder } from './orderAPI';
 const initialState = {
   orders: [],
   status: 'idle',
+  currentOrder:null
 };
 
 export const createOrderAsync = createAsyncThunk(
@@ -18,8 +19,8 @@ export const orderSlice = createSlice({
   name: 'order',
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    resetOrder: (state) => {
+      state.currentOrder=null;
     }
     
   },  
@@ -32,12 +33,13 @@ export const orderSlice = createSlice({
       .addCase(createOrderAsync.fulfilled, (state, action) => {
         state.status = 'idle';
         state.orders.push(action.payload);
+        state.currentOrder=action.payload;
       });
   },
 });
 
-//export const { increment} = orderSlice.actions;
+export const { resetOrder} = orderSlice.actions;
 
-//e xport const selectOrders = (state) => state.counter.orders;
+export const selectCurrentOrder = (state) => state.order.currentOrder;
 
 export default orderSlice.reducer;
