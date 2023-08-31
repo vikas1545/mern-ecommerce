@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { fetchLoggedInUserOrder, updateUser, fetchLoggedInUser } from "./userAPI";
+import { fetchLoggedInUserOrders, updateUser, fetchLoggedInUser } from "./userAPI";
 
 const initialState = {
     userOrders: [],
@@ -8,9 +8,9 @@ const initialState = {
 }
 
 export const fetchLoggedInUserOrderAsync = createAsyncThunk(
-    'user/fetchLoggedInUserOrder',
+    'user/fetchLoggedInUserOrders',
     async (id) => {
-        const response = await fetchLoggedInUserOrder(id);
+        const response = await fetchLoggedInUserOrders(id);
         return response.data;
     }
 );
@@ -18,13 +18,13 @@ export const fetchLoggedInUserOrderAsync = createAsyncThunk(
 export const fetchLoggedInUserAsync = createAsyncThunk(
     'user/fetchLoggedInUser',
     async (id) => {
-        const response = await fetchLoggedInUser(id);
-        // The value we return becomes the `fulfilled` action payload
-        return response.data;
+      const response = await fetchLoggedInUser(id);
+      // The value we return becomes the `fulfilled` action payload
+      return response.data;
     }
-);
+  );
 
-const updateUserAsync = createAsyncThunk(
+export const updateUserAsync = createAsyncThunk(
     'user/updateUser',
     async (update) => {
         const response = await updateUser(update);

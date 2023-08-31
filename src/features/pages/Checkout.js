@@ -5,9 +5,10 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { Link, Navigate } from "react-router-dom";
 import { deleteItemFromCartAsync, selectItems, updateCartAsync } from "../cart/cartSlice";
 import { useForm } from "react-hook-form";
-import { selectLoggedInUser, updateUserAsync } from "../auth/authSlice";
+import { updateUserAsync } from "../auth/authSlice";
 import { createOrderAsync, selectCurrentOrder } from "../order/orderSlice";
 //import { selectUserInfo } from '../features/user/userSlice';
+import { selectUserInfo } from "../user/userSlice";
 
 function Checkout() {
   const {
@@ -16,7 +17,7 @@ function Checkout() {
     watch,
     formState: { errors },
   } = useForm();
-  const user = useSelector(selectLoggedInUser)
+  const user = useSelector(selectUserInfo)
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
   const currentOrder = useSelector(selectCurrentOrder)

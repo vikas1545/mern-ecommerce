@@ -59,6 +59,9 @@ export default function UserProfile() {
           <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
             email address : {user.email}
           </h3>
+          <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
+            user role : {user.role}
+          </h3>
         </div>
 
         <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
@@ -267,7 +270,7 @@ export default function UserProfile() {
 
           <p className="mt-0.5 text-sm text-gray-500">Your Addresses :</p>
           {user.addresses.map((address, index) => (
-            <div>
+            <div key={index}>
               {selectedEditIndex === index ? (
                 <form
                   className="bg-white px-5 py-12 mt-12"

@@ -536,7 +536,7 @@
     },
     {
       "id": 30,
-      "title": "Key Holder",
+      "title": "Key Holder edit",
       "description": "Attractive DesignMetallic materialFour key hooksReliable & DurablePremium Quality",
       "price": 30,
       "discountPercentage": 2.92,
@@ -1464,7 +1464,8 @@
         "https://i.dummyjson.com/data/products/80/3.png",
         "https://i.dummyjson.com/data/products/80/4.jpg",
         "https://i.dummyjson.com/data/products/80/thumbnail.jpg"
-      ]
+      ],
+      "deleted": true
     },
     {
       "id": 81,
@@ -2013,24 +2014,16 @@
     {
       "email": "vikaskumar.vk0612@gmail.com",
       "password": "Vikas@1545",
+      "role": "user",
       "addresses": [
         {
           "name": "vikas kumar",
           "email": "vikaskumar.vk0612@gmail.com",
-          "phone": "8825134151",
-          "street": "168 ",
-          "city": "noida",
-          "state": "up",
-          "pincode": "201305"
-        },
-        {
-          "name": "vikas kumar",
-          "email": "vikaskumar.vk0612@gmail.com",
-          "phone": "8825134151",
-          "street": "laxmi nagar",
           "city": "delhi",
           "state": "new delhi",
-          "pincode": "110001"
+          "pinCode": "110002",
+          "phone": "8825134151",
+          "street": "ashok nagar"
         },
         {
           "name": "vikas kumar",
@@ -2056,18 +2049,21 @@
     {
       "email": "vikaskumar.vk0612@gmail.com",
       "password": "Vikas@1545",
+      "role": "user",
       "addresses": [],
       "id": 2
     },
     {
       "email": "vikaskumar.vk0612@gmail.com",
       "password": "Vikas@1545",
+      "role": "user",
       "addresses": [],
       "id": 3
     },
     {
       "email": "vikasnationaladmin3210@gmail.com",
       "password": "Vikas@1545",
+      "role": "admin",
       "addresses": [],
       "id": 4
     }
@@ -2236,6 +2232,160 @@
       },
       "status": "Pending",
       "id": 2
+    },
+    {
+      "items": [
+        {
+          "title": "HP Pavilion 15-DK1056WM",
+          "description": "HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10",
+          "price": 1099,
+          "discountPercentage": 6.18,
+          "rating": 4.43,
+          "stock": 89,
+          "brand": "HP Pavilion",
+          "category": "laptops",
+          "thumbnail": "https://i.dummyjson.com/data/products/10/thumbnail.jpeg",
+          "images": [
+            "https://i.dummyjson.com/data/products/10/1.jpg",
+            "https://i.dummyjson.com/data/products/10/2.jpg",
+            "https://i.dummyjson.com/data/products/10/3.jpg",
+            "https://i.dummyjson.com/data/products/10/thumbnail.jpeg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 1
+        }
+      ],
+      "totalAmount": 1099,
+      "totalItems": 1,
+      "user": {
+        "email": "vikaskumar.vk0612@gmail.com",
+        "password": "Vikas@1545",
+        "addresses": [
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "phone": "8825134151",
+            "street": "168 ",
+            "city": "noida",
+            "state": "up",
+            "pincode": "201305"
+          },
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "phone": "8825134151",
+            "street": "laxmi nagar",
+            "city": "delhi",
+            "state": "new delhi",
+            "pincode": "110001"
+          },
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "phone": "8825134161",
+            "street": "ashoka road",
+            "city": "noida",
+            "state": "up",
+            "pincode": "201305"
+          }
+        ],
+        "id": 1,
+        "data": {
+          "name": "vikas kumar",
+          "email": "vikaskumar.vk0612@gmail.com",
+          "phone": "8825134151",
+          "street": "168 ",
+          "city": "noida",
+          "state": "up",
+          "pincode": "201305"
+        }
+      },
+      "paymentMethod": "cash",
+      "selectedAddress": {
+        "name": "vikas kumar",
+        "email": "vikaskumar.vk0612@gmail.com",
+        "phone": "8825134151",
+        "street": "laxmi nagar",
+        "city": "delhi",
+        "state": "new delhi",
+        "pincode": "110001"
+      },
+      "status": "Pending",
+      "id": 3
+    },
+    {
+      "items": [
+        {
+          "title": "iPhone X",
+          "description": "SIM-Free, Model A19211 6.5-inch Super Retina HD display with OLED technology A12 Bionic chip with ...",
+          "price": 899,
+          "discountPercentage": 17.94,
+          "rating": 4.44,
+          "stock": 34,
+          "brand": "Apple",
+          "category": "smartphones",
+          "thumbnail": "https://i.dummyjson.com/data/products/2/thumbnail.jpg",
+          "images": [
+            "https://i.dummyjson.com/data/products/2/1.jpg",
+            "https://i.dummyjson.com/data/products/2/2.jpg",
+            "https://i.dummyjson.com/data/products/2/3.jpg",
+            "https://i.dummyjson.com/data/products/2/thumbnail.jpg"
+          ],
+          "quantity": 1,
+          "user": 1,
+          "id": 1
+        }
+      ],
+      "totalAmount": 899,
+      "totalItems": 1,
+      "user": {
+        "email": "vikaskumar.vk0612@gmail.com",
+        "password": "Vikas@1545",
+        "role": "user",
+        "addresses": [
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "city": "delhi",
+            "state": "new delhi",
+            "pinCode": "110002",
+            "phone": "8825134151",
+            "street": "ashok nagar"
+          },
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "phone": "8825134161",
+            "street": "ashoka road",
+            "city": "noida",
+            "state": "up",
+            "pincode": "201305"
+          }
+        ],
+        "id": 1,
+        "data": {
+          "name": "vikas kumar",
+          "email": "vikaskumar.vk0612@gmail.com",
+          "phone": "8825134151",
+          "street": "168 ",
+          "city": "noida",
+          "state": "up",
+          "pincode": "201305"
+        }
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "vikas kumar",
+        "email": "vikaskumar.vk0612@gmail.com",
+        "phone": "8825134161",
+        "street": "ashoka road",
+        "city": "noida",
+        "state": "up",
+        "pincode": "201305"
+      },
+      "status": "Pending",
+      "id": 4
     }
   ]
 }

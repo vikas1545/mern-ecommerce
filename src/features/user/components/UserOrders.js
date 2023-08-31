@@ -9,7 +9,7 @@ import { selectLoggedInUser } from "../../auth/authSlice";
 
 export default function UserOrders() {
   const dispatch = useDispatch();
-  const user = useSelector(selectLoggedInUser);
+  const user = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
 
   useEffect(() => {
@@ -18,8 +18,8 @@ export default function UserOrders() {
 
   return (
     <div>
-      {orders.map((order) => (
-        <div>
+      {orders.map((order,index) => (
+        <div key={index}>
           <div>
             <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
               <div className="border-t border-gray-200 px-4 py-6 sm:px-6">

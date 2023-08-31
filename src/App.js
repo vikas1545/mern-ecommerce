@@ -19,10 +19,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import PageNotFound from './features/pages/404';
 import OrderSuccessPage from './features/pages/OrderSuccessPage'
 import UserOrdersPage from './features/pages/UserOrdersPage';
+import { fetchLoggedInUserAsync } from './features/user/userSlice';
+import UserProfile from './features/user/components/UserProfile';
+import UserProfilePage from './features/pages/UserProfilePage';
+import Logout from './features/auth/components/Logout';
+import ForgotPasswordPage from './features/pages/ForgotPasswordPage';
+import ProtectedAdmin from './features/auth/components/ProtectedAdmin';
+
+import AdminHome from './features/pages/AdminHome';
+import AdminProductDetailPage from './features/pages/AdminProductDetailPage';
+import AdminProductFormPage from './features/pages/AdminProductFormPage';
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: (<Protected><Home/></Protected>),
+  },
+  {
+    path: '/admin',
+    element: (
+      <ProtectedAdmin>
+        <AdminHome></AdminHome>
+      </ProtectedAdmin>
+    ),
   },
   {
     path: "/login",
@@ -48,9 +67,45 @@ const router = createBrowserRouter([
     path: '/order-success/:id',
     element: (<OrderSuccessPage/>),
   },
+  {
+    path: '/admin/product-detail/:id',
+    element: (
+      <ProtectedAdmin>
+        <AdminProductDetailPage></AdminProductDetailPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: '/admin/product-form',
+    element: (
+      <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage>
+      </ProtectedAdmin>
+    ),
+  },
+  {
+    path: '/admin/product-form/edit/:id',
+    element: (
+      <ProtectedAdmin>
+        <AdminProductFormPage></AdminProductFormPage> 
+      </ProtectedAdmin>
+    ),
+  },
   { 
     path: '/orders',
     element: (<UserOrdersPage/>),
+  },
+  { 
+    path: '/profile',
+    element: (<UserProfilePage/>),
+  },
+  {
+    path: '/logout',
+    element: <Logout></Logout>,
+  },
+  {
+    path: '/forgot-password',
+    element: <ForgotPasswordPage></ForgotPasswordPage>,
   },
   { 
     path: '*',
@@ -69,6 +124,7 @@ function App() {
    useEffect(()=>{
       if(user) {
         dispatch(fetchItemsByUserIdAsync(user.id))
+        dispatch(fetchLoggedInUserAsync(user.id))
       }
     },[dispatch,user])
 
