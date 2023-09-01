@@ -11,6 +11,7 @@ export function createUser(userData) {
     })
 }
 
+
 export function checkUser(loginInfo) {
     return new Promise(async (resolve,reject) =>{
         const email = loginInfo.email;
@@ -31,3 +32,11 @@ export function checkUser(loginInfo) {
         
     })
 }
+
+
+export function signOut(userId) {
+    return new Promise(async (resolve) => {
+      // TODO: on server we will remove user session info
+      resolve({ data: 'success' });
+    });
+  }
