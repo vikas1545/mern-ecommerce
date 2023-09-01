@@ -2149,7 +2149,7 @@
         "state": "up",
         "pincode": "201305"
       },
-      "status": "Pending",
+      "status": "cancelled",
       "id": 1
     },
     {
@@ -2230,7 +2230,7 @@
         "state": "up",
         "pincode": "201305"
       },
-      "status": "Pending",
+      "status": "delivered",
       "id": 2
     },
     {
@@ -2386,6 +2386,80 @@
       },
       "status": "Pending",
       "id": 4
+    },
+    {
+      "items": [
+        {
+          "title": "Fog Scent Xpressio Perfume",
+          "description": "Product details of Best Fog Scent Xpressio Perfume 100ml For Men cool long lasting perfumes for Men",
+          "price": 13,
+          "discountPercentage": 8.14,
+          "rating": 4.59,
+          "stock": 61,
+          "brand": "Fog Scent Xpressio",
+          "category": "fragrances",
+          "thumbnail": "https://i.dummyjson.com/data/products/13/thumbnail.webp",
+          "images": [
+            "https://i.dummyjson.com/data/products/13/1.jpg",
+            "https://i.dummyjson.com/data/products/13/2.png",
+            "https://i.dummyjson.com/data/products/13/3.jpg",
+            "https://i.dummyjson.com/data/products/13/4.jpg",
+            "https://i.dummyjson.com/data/products/13/thumbnail.webp"
+          ],
+          "quantity": 3,
+          "user": 1,
+          "id": 1
+        }
+      ],
+      "totalAmount": 36,
+      "totalItems": 3,
+      "user": {
+        "email": "vikaskumar.vk0612@gmail.com",
+        "password": "Vikas@1545",
+        "role": "user",
+        "addresses": [
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "city": "delhi",
+            "state": "new delhi",
+            "pinCode": "110002",
+            "phone": "8825134151",
+            "street": "ashok nagar"
+          },
+          {
+            "name": "vikas kumar",
+            "email": "vikaskumar.vk0612@gmail.com",
+            "phone": "8825134161",
+            "street": "ashoka road",
+            "city": "noida",
+            "state": "up",
+            "pincode": "201305"
+          }
+        ],
+        "id": 1,
+        "data": {
+          "name": "vikas kumar",
+          "email": "vikaskumar.vk0612@gmail.com",
+          "phone": "8825134151",
+          "street": "168 ",
+          "city": "noida",
+          "state": "up",
+          "pincode": "201305"
+        }
+      },
+      "paymentMethod": "card",
+      "selectedAddress": {
+        "name": "vikas kumar",
+        "email": "vikaskumar.vk0612@gmail.com",
+        "city": "delhi",
+        "state": "new delhi",
+        "pinCode": "110002",
+        "phone": "8825134151",
+        "street": "ashok nagar"
+      },
+      "status": "Pending",
+      "id": 5
     }
   ]
 }
