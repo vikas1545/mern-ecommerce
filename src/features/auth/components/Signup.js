@@ -7,6 +7,7 @@ export function Signup() {
   const dispatch = useDispatch();
   const {register,handleSubmit,watch,formState: { errors }}=useForm();
   const user = useSelector(selectLoggedInUser);
+  console.log("user from signup :",user);
   return (
     <>
     {user && <Navigate to='/' replace={true}></Navigate>}
@@ -25,12 +26,12 @@ export function Signup() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form noValidate className="space-y-6" method="POST" onSubmit={handleSubmit((data)=>{
-            console.log(data);
+            console.log("data from signup :",data);
             dispatch(createUserAsync({
               email:data.email,
               password:data.confirmPassword,
               addresses:[],
-              role:'user'
+              role:'user',
             }))
           })}>
             <div>

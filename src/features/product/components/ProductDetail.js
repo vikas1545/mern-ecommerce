@@ -4,7 +4,7 @@ import { RadioGroup } from '@headlessui/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProductByIdAsync, selectProductById } from '../productSlice';
 import { useParams } from 'react-router-dom';
-import { addToCartAsync } from '../../cart/cartSlice';
+import { addToCartAsync, selectItems } from '../../cart/cartSlice';
 import { selectLoggedInUser } from '../../auth/authSlice';
 import { discountedPrice } from '../../../app/constants';
 // TODO: In server data we will add colors, sizes , highlights. to each product
@@ -42,15 +42,19 @@ export default function ProductDetail() {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState(sizes[2]);
   const user = useSelector(selectLoggedInUser);
+  const items = useSelector(selectItems);
   const product = useSelector(selectProductById);
   const dispatch = useDispatch();
   const params = useParams();
 
   const handleCart = (e) => {
     e.preventDefault();
-    const newItem = { ...product, quantity: 1, user: user.id };
-    delete newItem['id'];
-    dispatch(addToCartAsync(newItem));
+    if(items.findIndex((item)=> item.product.id === product.id) < 0) {
+      const newItem = { ...product,product:product.id, quantity: 1, user: user.id };
+      delete newItem['id'];
+      dispatch(addToCartAsync(newItem));
+    }
+  
   };
 
   useEffect(() => {
