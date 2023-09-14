@@ -11,6 +11,7 @@ export function createUser(userData) {
 }
 
 export function checkUser(loginInfo) {
+    //console.log("loginInfo from checkUser :",loginInfo);
     return new Promise(async (resolve, reject) => {
         try {
             const response = await fetch("http://localhost:8080/auth/login", {
@@ -23,7 +24,7 @@ export function checkUser(loginInfo) {
                 const data = await response.json();
                 resolve({ data });
             } else {
-                const err = await response.json();
+                const err = await response.text();
                 reject(err);
             }
 

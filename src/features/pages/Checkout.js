@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -19,8 +19,9 @@ function Checkout() {
     watch,
     formState: { errors },
   } = useForm();
-  //const user = useSelector(selectUserInfo)
-  const user = useSelector(selectLoggedInUser);
+  
+  const user = useSelector(selectUserInfo);
+
   const dispatch = useDispatch();
   const [open, setOpen] = useState(true);
   const currentOrder = useSelector(selectCurrentOrder)
@@ -59,6 +60,7 @@ function Checkout() {
     }
   }
 
+
   return (
     <>
       {!items.length && <Navigate to="/" replace={true} />}
@@ -67,9 +69,7 @@ function Checkout() {
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
             <form noValidate className="bg-white px-5 py-12 mt-12" onSubmit={handleSubmit((data) => {
-              console.log(data);
               dispatch(updateUserAsync({ ...user, addresses: [...user.addresses, data] }));
-
             })}>
               <div className="space-y-12">
                 <div className="border-b border-gray-900/10 pb-12">

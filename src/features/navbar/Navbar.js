@@ -1,14 +1,12 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import {
-  Bars3Icon,
-  ShoppingCartIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3Icon,ShoppingCartIcon,XMarkIcon,} from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectItems } from "../cart/cartSlice";
 import { selectLoggedInUser } from '../auth/authSlice';
+import { selectUserInfo } from "../user/userSlice";
+
 const user1 = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -32,11 +30,11 @@ function classNames(...classes) {
 
 function Navbar({ children }) {
   const items = useSelector(selectItems);
-  const user = useSelector(selectLoggedInUser);
-  console.log('user :',user);
+  const userInfo = useSelector(selectUserInfo);
+  console.log('userInfo :',userInfo);
     return (
     <>
-      <div className="min-h-full">
+      {userInfo &&<div className="min-h-full">
         <Disclosure as="nav" className="bg-gray-800">
           {({ open }) => (
             <>
@@ -55,7 +53,7 @@ function Navbar({ children }) {
                     <div className="hidden md:block">
                       <div className="ml-10 flex items-baseline space-x-4">
                       {navigation.map((item) =>
-                          item[user.role] ? (
+                          item[userInfo.role] ? (
                             <Link
                               key={item.name}
                               to={item.link}
@@ -103,7 +101,8 @@ function Navbar({ children }) {
                             <span className="sr-only">Open user menu</span>
                             <img
                               className="h-8 w-8 rounded-full"
-                              src={user1.imageUrl}
+                               src={userInfo.imageUrl}
+                              // src={user1.imageUrl}
                               alt=""
                             />
                           </Menu.Button>
@@ -183,16 +182,17 @@ function Navbar({ children }) {
                     <div className="flex-shrink-0">
                       <img
                         className="h-10 w-10 rounded-full"
-                        src={user.imageUrl}
+                        // src={user.imageUrl}
+                        src={userInfo.imageUrl}
                         alt=""
                       />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium leading-none text-white">
-                        {user.name}
+                        {userInfo.name}
                       </div>
                       <div className="text-sm font-medium leading-none text-gray-400">
-                        {user.email}
+                        {userInfo.email}
                       </div>
                     </div>
                     <Link to="/cart">
@@ -245,6 +245,7 @@ function Navbar({ children }) {
           </div>
         </main>
       </div>
+}
     </>
   );
 }

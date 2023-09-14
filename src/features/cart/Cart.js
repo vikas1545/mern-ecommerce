@@ -11,6 +11,7 @@ export function Cart() {
   const [open, setOpen] = useState(true);
 
   const items = useSelector(selectItems);
+  console.log('items @@@@@@@@@@@@@@@@@@@@@2 ,',items);
   const totalAmount = items.reduce(
     (amount, item) => discountedPrice(item.product) * item.quantity + amount,
     0
